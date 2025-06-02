@@ -514,70 +514,68 @@ export default function DemoPage() {
           )}
 
           {/* Optimized Photo Modal */}
-          {selectedPhoto && (
-            <div 
-              className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center"
-              data-modal="photo-modal"
-            >
-              
-              <ModalNavigation
-                currentIndex={currentIndex}
-                totalPhotos={album.photos.length}
-                onPrev={prevPhoto}
-                onNext={nextPhoto}
-                onClose={closePhotoModal}
-              />
+        {selectedPhoto && (
+  <div 
+    className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center"
+    data-modal="photo-modal"
+  >
+    
+    <ModalNavigation
+      currentIndex={currentIndex}
+      totalPhotos={album.photos.length}
+      onPrev={prevPhoto}
+      onNext={nextPhoto}
+      onClose={closePhotoModal}
+    />
 
-              {/* Optimized Photo Display */}
-         <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-20 pb-20 sm:pb-16">
-  <div className="relative w-full h-full max-w-4xl">
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div className="relative max-w-full max-h-full">
-        <OptimizedImage
-          src={selectedPhoto.url}
-          alt={selectedPhoto.name || 'Ảnh cưới'}
-          width={1200}
-          height={800}
-          className="max-w-[calc(100vw-16px)] max-h-[calc(100vh-160px)] sm:max-h-[calc(100vh-200px)] w-auto h-auto object-contain rounded-lg sm:rounded-2xl shadow-2xl will-change-transform"
-          sizes="(max-width: 640px) calc(100vw - 16px), 100vw"
-          priority={true}
-        />
+    {/* Fixed Photo Display for Mobile */}
+    <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-20 pb-20 sm:pb-16">
+      <div className="relative w-full h-full max-w-4xl max-h-full flex items-center justify-center">
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+          <OptimizedImage
+            src={selectedPhoto.url}
+            alt={selectedPhoto.name || 'Ảnh cưới'}
+            width={1200}
+            height={800}
+            className="w-full h-full max-w-full max-h-full object-contain rounded-lg sm:rounded-2xl shadow-2xl will-change-transform"
+            sizes="100vw"
+            priority={true}
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Optimized Mobile Thumbnails */}
+    <div className="absolute bottom-20 left-0 right-0 z-10 px-4 sm:hidden">
+      <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+        {album.photos.slice(Math.max(0, currentIndex - 2), Math.min(album.photos.length, currentIndex + 3)).map((photo, idx) => {
+          const actualIndex = Math.max(0, currentIndex - 2) + idx;
+          return (
+            <button
+              key={actualIndex}
+              onClick={() => {
+                setCurrentIndex(actualIndex);
+                setSelectedPhoto(album.photos[actualIndex]);
+              }}
+              className={`flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden transition-all duration-200 active:scale-95 will-change-transform ${
+                actualIndex === currentIndex ? 'ring-2 ring-white scale-110' : ''
+              }`}
+            >
+              <OptimizedImage
+                src={photo.url}
+                alt=""
+                width={48}
+                height={48}
+                className="w-full h-full object-cover"
+                sizes="48px"
+              />
+            </button>
+          );
+        })}
       </div>
     </div>
   </div>
-</div>
-
-              {/* Optimized Mobile Thumbnails */}
-              <div className="absolute bottom-20 left-0 right-0 z-10 px-4 sm:hidden">
-                <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
-                  {album.photos.slice(Math.max(0, currentIndex - 2), Math.min(album.photos.length, currentIndex + 3)).map((photo, idx) => {
-                    const actualIndex = Math.max(0, currentIndex - 2) + idx;
-                    return (
-                      <button
-                        key={actualIndex}
-                        onClick={() => {
-                          setCurrentIndex(actualIndex);
-                          setSelectedPhoto(album.photos[actualIndex]);
-                        }}
-                        className={`flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden transition-all duration-200 active:scale-95 will-change-transform ${
-                          actualIndex === currentIndex ? 'ring-2 ring-white scale-110' : ''
-                        }`}
-                      >
-                        <OptimizedImage
-                          src={photo.url}
-                          alt=""
-                          width={48}
-                          height={48}
-                          className="w-full h-full object-cover"
-                          sizes="48px"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
+)}
         </div>
 
         {/* Demo Notice */}
