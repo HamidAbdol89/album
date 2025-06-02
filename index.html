@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Basic Meta Tags -->
+    <title>Album Wedding Share - Chia sẻ album ảnh cưới tạm thời</title>
+    <meta name="description" content="Nền tảng chia sẻ album ảnh cưới tạm thời - Tạo và chia sẻ album ảnh cưới với thời gian lưu trữ 30 ngày">
+    <meta name="keywords" content="album cưới, chia sẻ ảnh cưới, wedding photos, tạo album ảnh">
+    <meta name="author" content="Album Wedding Share">
+    
+    <!-- Open Graph Meta Tags for Facebook, LinkedIn, etc. -->
+    <meta property="og:title" content="Album Wedding Share - Chia sẻ album ảnh cưới tạm thời">
+    <meta property="og:description" content="Nền tảng chia sẻ album ảnh cưới tạm thời - Tạo và chia sẻ album ảnh cưới với thời gian lưu trữ 30 ngày">
+    <meta property="og:image" content="https://album-nu-one.vercel.app/og-image.jpg">
+    <meta property="og:image:alt" content="Album Wedding Share - Nền tảng chia sẻ ảnh cưới">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://album-nu-one.vercel.app">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:site_name" content="Album Wedding Share">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Album Wedding Share - Chia sẻ album ảnh cưới tạm thời">
+    <meta name="twitter:description" content="Nền tảng chia sẻ album ảnh cưới tạm thời - Tạo và chia sẻ album ảnh cưới với thời gian lưu trữ 30 ngày">
+    <meta name="twitter:image" content="https://album-nu-one.vercel.app/og-image.jpg">
+    <meta name="twitter:image:alt" content="Album Wedding Share - Nền tảng chia sẻ ảnh cưới">
+    <meta name="twitter:url" content="https://album-nu-one.vercel.app">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#ff6b9d">
+    <link rel="canonical" href="https://album-nu-one.vercel.app">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Wedding" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #ffc3d8);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem 0;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ff6b9d;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+            margin: 0 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
+        }
+        
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: #ff6b9d;
+            padding: 1rem 2.5rem;
+            border: 2px solid #ff6b9d;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+        
+        .btn-secondary:hover {
+            background: #ff6b9d;
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-card {
+                padding: 2rem;
+            }
+            
+            .cta-section {
+                padding: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .btn-primary, .btn-secondary {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">Album Wedding Share</h1>
+            <p class="subtitle">Chia sẻ khoảnh khắc đặc biệt của ngày cưới một cách dễ dàng và bảo mật</p>
+        </header>
+
+        <main class="main-content">
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <h3 class="feature-title">Tạo Album Dễ Dàng</h3>
+                <p class="feature-description">
+                    Upload và tổ chức ảnh cưới của bạn một cách nhanh chóng. 
+                    Giao diện đơn giản, thân thiện với người dùng.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3 class="feature-title">Chia Sẻ Linh Hoạt</h3>
+                <p class="feature-description">
+                    Tạo link chia sẻ riêng cho từng album. 
+                    Dễ dàng gửi qua Facebook, Zalo, Telegram hay bất kỳ đâu.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⏰</div>
+                <h3 class="feature-title">Lưu Trữ Tạm Thời</h3>
+                <p class="feature-description">
+                    Album tự động xóa sau 30 ngày để bảo vệ quyền riêng tư. 
+                    Không lo lắng về dung lượng lưu trữ lâu dài.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">An Toàn & Bảo Mật</h3>
+                <p class="feature-description">
+                    Chỉ những người có link mới có thể xem album. 
+                    Không cần đăng ký tài khoản, bảo vệ thông tin cá nhân.
+                </p>
+            </div>
+        </main>
+
+        <section class="cta-section">
+            <h2 class="cta-title">Bắt Đầu Ngay Hôm Nay</h2>
+            <p class="cta-description">
+                Tạo album ảnh cưới của bạn và chia sẻ những khoảnh khắc đẹp nhất 
+                với gia đình và bạn bè một cách dễ dàng.
+            </p>
+            <a href="/create" class="btn-primary">Tạo Album Mới</a>
+            <a href="/demo" class="btn-secondary">Xem Demo</a>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 Album Wedding Share. Được phát triển với ❤️ tại Việt Nam.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple analytics tracking
+        console.log('Album Wedding Share - Trang chủ được tải');
+        
+        // Track referrer for social media
+        if (document.referrer) {
+            console.log('Nguồn truy cập:', document.referrer);
+        }
+        
+        // Add smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

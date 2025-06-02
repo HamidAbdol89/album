@@ -60,13 +60,15 @@ export default async function handler(req, res) {
     console.log('✅ Found album:', albumData.title);
 
     // Parse form data với error handling
-    console.log('Parsing form data...');
-    const form = new IncomingForm({
-      uploadDir: '/tmp', // Sử dụng thư mục tạm
-      keepExtensions: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB limit
-      multiples: true
-    });
+  console.log('Parsing form data...');
+const form = new IncomingForm({
+  uploadDir: '/tmp', // Sử dụng thư mục tạm
+  keepExtensions: true,
+  maxFileSize: 50 * 1024 * 1024, // Tăng lên 50MB mỗi file
+  multiples: true, // Cho phép upload nhiều file
+  maxFiles: 20 // Giới hạn tối đa 20 file (tùy theo package version hỗ trợ)
+});
+
 
     let fields, files;
     try {
