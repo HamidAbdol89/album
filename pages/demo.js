@@ -127,45 +127,100 @@ const MasonryPhotoItem = ({ photo, index, onClick }) => {
   }, [isVisible, photo.url]);
 
   return (
+  <div
+    ref={ref}
+    className="relative group cursor-pointer w-full"
+    onClick={() => onClick(photo, index)}
+  >
+    <div 
+      className="relative overflow-hidden bg-gradient-to-br from-rose-100 to-pink-100 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform rounded-lg sm:rounded-xl md:rounded-2xl"
+      style={{
+        aspectRatio: aspectRatio,
+        minHeight: window.innerWidth < 640 ? '120px' : '150px',
+        width: '100%'
+      }}
+    >
+      {isVisible && (
+        <OptimizedImage
+          src={photo.url}
+          alt={photo.name || `Ảnh cưới ${index + 1}`}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        />
+      )}
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      
+      {/* Floating Elements - responsive sizes */}
+      <div className="absolute top-2 sm:top-3 right-2 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 will-change-transform">
+        <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+      </div>
+      
+      <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 bg-white/90 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 will-change-transform">
+        <span className="text-xs font-semibold text-gray-700">{index + 1}</span>
+      </div>
+    </div>
+  </div>
+);
+};
+// Uniform Photo Item cho mobile - kích thước đồng đều
+const UniformPhotoItem = ({ photo, index, onClick }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '50px' }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
     <div
       ref={ref}
-      className="relative group cursor-pointer w-full"
+      className="relative group cursor-pointer aspect-square"
       onClick={() => onClick(photo, index)}
     >
-      <div 
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform w-full"
-        style={{
-          aspectRatio: aspectRatio,
-          minHeight: '150px',
-          maxHeight: '400px' // Giới hạn chiều cao tối đa
-        }}
-      >
+      <div className="relative w-full h-full overflow-hidden rounded-xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] will-change-transform">
         {isVisible && (
           <OptimizedImage
             src={photo.url}
             alt={photo.name || `Ảnh cưới ${index + 1}`}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            sizes="(max-width: 640px) 50vw, 33vw"
           />
         )}
         
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         
-        {/* Floating Elements */}
-        <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 will-change-transform">
-          <Heart className="w-4 h-4 text-white" />
+        {/* Floating Heart */}
+        <div className="absolute top-2 right-2 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 will-change-transform">
+          <Heart className="w-3 h-3 text-white" />
         </div>
         
-        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 will-change-transform">
+        {/* Photo Index */}
+        <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 will-change-transform">
           <span className="text-xs font-semibold text-gray-700">{index + 1}</span>
         </div>
       </div>
     </div>
   );
 };
-
 // Masonry Layout Component
 const MasonryPhotoGrid = ({ photos, onPhotoClick }) => {
   const [columns, setColumns] = useState(2);
