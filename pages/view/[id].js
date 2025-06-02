@@ -729,21 +729,23 @@ return (
             />
 
             {/* Optimized Photo Display */}
-            <div className="relative w-full h-full flex items-center justify-center p-4 pt-20 pb-16">
-              <div className="relative max-w-4xl max-h-full w-full">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl will-change-transform">
-                  <OptimizedImage
-                    src={selectedPhoto.url}
-                    alt={selectedPhoto.name || 'Ảnh cưới'}
-                    width={1200}
-                    height={800}
-                    className="max-w-full max-h-[calc(100vh-200px)] w-full object-contain"
-                    sizes="100vw"
-                    priority={true}
-                  />
-                </div>
-              </div>
-            </div>
+           <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-20 pb-20 sm:pb-16">
+  <div className="relative w-full h-full max-w-4xl">
+    <div className="relative w-full h-full flex items-center justify-center">
+      <div className="relative max-w-full max-h-full">
+        <OptimizedImage
+          src={selectedPhoto.url}
+          alt={selectedPhoto.name || 'Ảnh cưới'}
+          width={1200}
+          height={800}
+          className="max-w-[calc(100vw-16px)] max-h-[calc(100vh-160px)] sm:max-h-[calc(100vh-200px)] w-auto h-auto object-contain rounded-lg sm:rounded-2xl shadow-2xl will-change-transform"
+          sizes="(max-width: 640px) calc(100vw - 16px), 100vw"
+          priority={true}
+        />
+      </div>
+    </div>
+  </div>
+</div>
 
             {/* Optimized Mobile Thumbnails */}
             <div className="absolute bottom-20 left-0 right-0 z-10 px-4 sm:hidden">
