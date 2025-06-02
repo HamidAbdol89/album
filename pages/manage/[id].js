@@ -17,7 +17,12 @@ export default function ManageAlbum() {
   const [error, setError] = useState('');
   
   // URL cho album và QR
-  const albumUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://album-nu-one.vercel.app'}/view/${id}`;
+const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (isLocal ? 'http://localhost:3000' : 'https://album-nu-one.vercel.app');
+
+const albumUrl = `${baseUrl}/view/${id}`;
+
 
   // Load thông tin album (trong thực tế sẽ fetch từ API)
   const loadAlbumInfo = async () => {

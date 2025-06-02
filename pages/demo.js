@@ -1,44 +1,41 @@
-// pages/view/[id].js
+// pages/demo.js
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
-import { X, Calendar, Clock, AlertCircle, ImageIcon, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
-import { formatDate } from '../../lib/utils';
+import { X, Calendar, Image as ImageIcon, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 
-export default function ViewAlbum() {
-  const router = useRouter();
-  const { id } = router.query;
-  
-  const [album, setAlbum] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+// Demo data - thay thế bằng ảnh thật của bạn
+const demoAlbum = {
+  title: "Ngày Cưới Của Chúng Tôi",
+  publicDate: "2024-12-15",
+  photos: [
+    { url: "images/1.jpg", name: "Lễ cưới" },
+    { url: "images/2.jpg", name: "Cô dâu chú rể" },
+    { url: "images/3.jpg", name: "Hạnh phúc" },
+    { url: "images/4.jpg", name: "Khoảnh khắc đẹp" },
+    { url: "images/5.jpg", name: "Tiệc cưới" },
+    { url: "images/6.jpg", name: "Nụ cười" },
+    { url: "images/7.jpg", name: "Tình yêu" },
+    { url: "images/8.jpg", name: "Gia đình" },
+    { url: "images/9.jpg", name: "Lãng mạn" },
+    { url: "images/10.jpg", name: "Kỷ niệm" }
+  ]
+};
+
+// Utility function to format date
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+export default function DemoPage() {
+  const [album] = useState(demoAlbum);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Load album data
-  useEffect(() => {
-    if (!id) return;
-    
-    const fetchAlbum = async () => {
-      try {
-        const response = await fetch(`/api/albums/${id}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setAlbum(data.album);
-        } else {
-          setError(data.message || 'Không thể tải album');
-        }
-      } catch (err) {
-        setError('Lỗi kết nối server');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAlbum();
-  }, [id]);
 
   // Handle photo modal
   const openPhotoModal = (photo, index) => {
@@ -79,49 +76,13 @@ export default function ViewAlbum() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedPhoto, currentIndex]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-rose-200 rounded-full animate-spin border-t-rose-500 mx-auto"></div>
-            <Heart className="w-6 h-6 text-rose-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-          </div>
-          <p className="mt-6 text-gray-600 font-medium">Đang tải kỷ niệm đẹp...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 flex items-center justify-center p-4">
-        <div className="text-center max-w-md mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
-            <AlertCircle className="w-16 h-16 text-rose-400 mx-auto mb-6" />
-            <h1 className="text-2xl font-bold text-gray-800 mb-3">
-              Không Thể Truy Cập Album
-            </h1>
-            <p className="text-gray-600 mb-8 leading-relaxed">{error}</p>
-            <button
-              onClick={() => router.push('/')}
-              className="px-8 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-300"
-            >
-              Về Trang Chủ
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [selectedPhoto, currentIndex, album.photos.length]);
 
   return (
     <>
       <Head>
-        <title>{album?.title || 'Album Cưới'}</title>
-        <meta name="description" content={`Xem album cưới: ${album?.title}`} />
+        <title>Demo - Album Cưới</title>
+        <meta name="description" content="Xem demo album cưới với giao diện đẹp mắt" />
       </Head>
       
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50">
@@ -159,54 +120,39 @@ export default function ViewAlbum() {
 
         <div className="container mx-auto px-4 pb-12">
           {/* Photo Grid with Masonry Layout */}
-          {album.photos.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 max-w-md mx-auto shadow-xl border border-white/20">
-                <div className="w-20 h-20 bg-gradient-to-br from-rose-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <ImageIcon className="w-10 h-10 text-rose-400" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  Chưa Có Khoảnh Khắc
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Album này đang chờ những kỷ niệm đẹp được thêm vào.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {album.photos.map((photo, index) => (
-                <div
-                  key={index}
-                  className="relative group cursor-pointer"
-                  onClick={() => openPhotoModal(photo, index)}
-                >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
-                    <Image
-                      src={photo.url}
-                      alt={photo.name || `Ảnh cưới ${index + 1}`}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    />
-                    
-                    {/* Elegant Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Floating Heart Icon */}
-                    <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-                      <Heart className="w-4 h-4 text-white" />
-                    </div>
-                    
-                    {/* Photo Number Badge */}
-                    <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                      <span className="text-xs font-semibold text-gray-700">{index + 1}</span>
-                    </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {album.photos.map((photo, index) => (
+              <div
+                key={index}
+                className="relative group cursor-pointer"
+                onClick={() => openPhotoModal(photo, index)}
+              >
+                <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
+                  <Image
+                    src={photo.url}
+                    alt={photo.name || `Ảnh cưới ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    unoptimized // Cho phép load ảnh từ external sources
+                  />
+                  
+                  {/* Elegant Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Floating Heart Icon */}
+                  <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                    <Heart className="w-4 h-4 text-white" />
+                  </div>
+                  
+                  {/* Photo Number Badge */}
+                  <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    <span className="text-xs font-semibold text-gray-700">{index + 1}</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
 
           {/* Premium Photo Modal */}
           {selectedPhoto && (
@@ -265,12 +211,11 @@ export default function ViewAlbum() {
                       width={1200}
                       height={800}
                       className="max-w-full max-h-[calc(100vh-200px)] w-full object-contain"
+                      unoptimized
                     />
                   </div>
                 </div>
               </div>
-
-
 
               {/* Photo Thumbnails Strip (Mobile) */}
               <div className="absolute bottom-20 left-0 right-0 z-10 px-4 sm:hidden">
@@ -294,6 +239,7 @@ export default function ViewAlbum() {
                           width={48}
                           height={48}
                           className="w-full h-full object-cover"
+                          unoptimized
                         />
                       </button>
                     );
@@ -302,6 +248,23 @@ export default function ViewAlbum() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Demo Notice */}
+        <div className="fixed bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-white/20 max-w-xs">
+          <p className="text-xs text-gray-600">
+            <strong>Demo:</strong> Đây là bản xem thử với ảnh mẫu. Bạn có thể thay thế bằng ảnh thật của mình.
+          </p>
+        </div>
+
+        {/* Back to Home Button */}
+        <div className="fixed bottom-4 left-4">
+          <button
+            onClick={() => window.history.back()}
+            className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-full font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+          >
+            ← Quay lại
+          </button>
         </div>
       </div>
     </>
