@@ -729,20 +729,19 @@ return (
     />
 
     {/* Fixed Photo Display for Mobile */}
-    <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-20 pb-20 sm:pb-16">
-      <div className="relative w-full h-full max-w-4xl max-h-full flex items-center justify-center">
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-          <OptimizedImage
-            src={selectedPhoto.url}
-            alt={selectedPhoto.name || 'Ảnh cưới'}
-            width={1200}
-            height={800}
-            className="w-full h-full max-w-full max-h-full object-contain rounded-lg sm:rounded-2xl shadow-2xl will-change-transform"
-            sizes="100vw"
-            priority={true}
-          />
-        </div>
-      </div>
+    <div className="absolute inset-4 top-20 bottom-24 flex items-center justify-center">
+      <img
+        src={selectedPhoto.url}
+        alt={selectedPhoto.name || 'Ảnh cưới'}
+        className="rounded-lg sm:rounded-2xl shadow-2xl"
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          width: 'auto',
+          height: 'auto',
+          objectFit: 'contain'
+        }}
+      />
     </div>
 
     {/* Optimized Mobile Thumbnails */}
