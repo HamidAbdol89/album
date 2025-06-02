@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
     "clsx": "^2.0.0",
+    "dotenv": "^16.5.0",
     "firebase": "^10.14.1",
     "formidable": "^3.5.4",
     "lucide-react": "^0.292.0",
