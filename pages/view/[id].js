@@ -64,27 +64,32 @@ const SmartPhotoGridItem = ({ photo, index, onClick, aspectRatio = 1 }) => {
   const [calculatedSize, setCalculatedSize] = useState({ span: 1, rowSpan: 1 });
   const ref = useRef();
 
-  // Tính toán kích thước dựa trên tỷ lệ ảnh thực tế
+  // Tính toán kích thước dựa trên tỷ lệ ảnh thực tế NHƯNG có giới hạn
   const calculateOptimalSize = useCallback((width, height) => {
     const ratio = width / height;
+    
+    // Giới hạn ratio để tránh ảnh quá biến dạng
+    let limitedRatio = ratio;
+    if (ratio > 2.5) limitedRatio = 2.5;
+    if (ratio < 0.4) limitedRatio = 0.4;
     
     // Định nghĩa các kích thước có thể
     let span = 1;
     let rowSpan = 1;
     
-    if (ratio > 1.8) {
+    if (limitedRatio > 1.8) {
       // Ảnh rất rộng - span 2 cột
       span = 2;
       rowSpan = 1;
-    } else if (ratio > 1.3) {
+    } else if (limitedRatio > 1.3) {
       // Ảnh hơi rộng - span 2 cột nhưng cao hơn
       span = 2;
       rowSpan = 1;
-    } else if (ratio < 0.7) {
+    } else if (limitedRatio < 0.7) {
       // Ảnh dọc - span 1 cột, cao 2 hàng
       span = 1;
       rowSpan = 2;
-    } else if (ratio < 0.8 && Math.random() > 0.7) {
+    } else if (limitedRatio < 0.8 && Math.random() > 0.7) {
       // Thỉnh thoảng tạo ảnh vuông lớn
       span = 2;
       rowSpan = 2;
@@ -95,13 +100,13 @@ const SmartPhotoGridItem = ({ photo, index, onClick, aspectRatio = 1 }) => {
     }
     
     // Thêm một số biến thể ngẫu nhiên để tránh layout quá đều
-    if (index % 7 === 0 && ratio > 0.8 && ratio < 1.2) {
+    if (index % 7 === 0 && limitedRatio > 0.8 && limitedRatio < 1.2) {
       span = 2;
       rowSpan = 2;
-    } else if (index % 11 === 0 && ratio > 1.1) {
+    } else if (index % 11 === 0 && limitedRatio > 1.1) {
       span = 2;
       rowSpan = 1;
-    } else if (index % 13 === 0 && ratio < 0.9) {
+    } else if (index % 13 === 0 && limitedRatio < 0.9) {
       span = 1;
       rowSpan = 2;
     }
@@ -150,28 +155,17 @@ const SmartPhotoGridItem = ({ photo, index, onClick, aspectRatio = 1 }) => {
     }
   }, [isVisible, photo.url, calculateOptimalSize]);
 
-  // Dynamic CSS classes dựa trên kích thước tính toán
-  const getGridClasses = () => {
-    const { span, rowSpan } = calculatedSize;
-    return {
-      container: `col-span-${span} row-span-${rowSpan}`,
-      aspect: imageDimensions.width && imageDimensions.height 
-        ? `aspect-[${imageDimensions.width}/${imageDimensions.height}]`
-        : 'aspect-square'
-    };
-  };
-
-  const { container, aspect } = getGridClasses();
-
   return (
     <div
       ref={ref}
-      className={`relative group cursor-pointer ${container} min-h-[120px]`}
+      className={`relative group cursor-pointer w-full`}
       onClick={() => onClick(photo, index)}
       style={{
-        // Fallback cho các trường hợp Tailwind không có sẵn class
+        // Sử dụng CSS Grid properties trực tiếp để tránh conflict với Tailwind
         gridColumn: `span ${calculatedSize.span}`,
         gridRow: `span ${calculatedSize.rowSpan}`,
+        minHeight: '120px',
+        maxHeight: '400px' // Giới hạn chiều cao tối đa
       }}
     >
       <div className={`relative w-full h-full overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform`}>
@@ -307,7 +301,15 @@ const MasonryPhotoItem = ({ photo, index, onClick }) => {
     if (isVisible && photo.url) {
       const img = new window.Image();
       img.onload = () => {
-        setAspectRatio(img.naturalWidth / img.naturalHeight);
+        // Giới hạn aspect ratio để tránh ảnh quá dài hoặc quá rộng
+        const naturalRatio = img.naturalWidth / img.naturalHeight;
+        let limitedRatio = naturalRatio;
+        
+        // Giới hạn aspect ratio từ 0.5 đến 2.0
+        if (naturalRatio > 2.0) limitedRatio = 2.0;
+        if (naturalRatio < 0.5) limitedRatio = 0.5;
+        
+        setAspectRatio(limitedRatio);
       };
       img.src = photo.url;
     }
@@ -316,14 +318,15 @@ const MasonryPhotoItem = ({ photo, index, onClick }) => {
   return (
     <div
       ref={ref}
-      className="relative group cursor-pointer"
+      className="relative group cursor-pointer w-full"
       onClick={() => onClick(photo, index)}
     >
       <div 
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform w-full"
         style={{
           aspectRatio: aspectRatio,
-          minHeight: '150px'
+          minHeight: '150px',
+          maxHeight: '400px' // Giới hạn chiều cao tối đa
         }}
       >
         {isVisible && (

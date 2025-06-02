@@ -112,11 +112,15 @@ const MasonryPhotoItem = ({ photo, index, onClick }) => {
     if (isVisible && photo.url) {
       const img = new window.Image();
       img.onload = () => {
-        setAspectRatio(img.naturalWidth / img.naturalHeight);
-      };
-      img.onerror = () => {
-        // Fallback aspect ratio if image fails to load
-        setAspectRatio(1);
+        // Giới hạn aspect ratio để tránh ảnh quá dài hoặc quá rộng
+        const naturalRatio = img.naturalWidth / img.naturalHeight;
+        let limitedRatio = naturalRatio;
+        
+        // Giới hạn aspect ratio từ 0.5 đến 2.0
+        if (naturalRatio > 2.0) limitedRatio = 2.0;
+        if (naturalRatio < 0.5) limitedRatio = 0.5;
+        
+        setAspectRatio(limitedRatio);
       };
       img.src = photo.url;
     }
@@ -125,14 +129,15 @@ const MasonryPhotoItem = ({ photo, index, onClick }) => {
   return (
     <div
       ref={ref}
-      className="relative group cursor-pointer"
+      className="relative group cursor-pointer w-full"
       onClick={() => onClick(photo, index)}
     >
       <div 
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] will-change-transform w-full"
         style={{
           aspectRatio: aspectRatio,
-          minHeight: '150px'
+          minHeight: '150px',
+          maxHeight: '400px' // Giới hạn chiều cao tối đa
         }}
       >
         {isVisible && (
