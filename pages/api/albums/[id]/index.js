@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     
     if (expired) {
       return res.status(410).json({
-        message: 'Album này đã hết hạn sau 1 tháng',
+        message: 'Album này đã hết hạn sau 2 tháng',
         expiredAt: publicDate,
         status: 'expired'
       });
